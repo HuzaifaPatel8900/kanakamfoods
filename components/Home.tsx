@@ -2,8 +2,15 @@ import React from "react";
 import FoodCard from "./FoodCard";
 import TestimonialCard from "@/components/TestimonialCard";
 import Footer from "./Footer";
+import type { FoodItem } from "@/types/food";
 
-const Home = () => {
+interface HomeProps {
+  foodData: FoodItem[];
+  cart: Record<number, number>;
+  onQuantityChange: (itemId: number, quantity: number) => void;
+}
+
+const Home = ({ foodData, cart, onQuantityChange }: HomeProps) => {
   const testimonials = [
     {
       id: 1,
@@ -22,48 +29,6 @@ const Home = () => {
       rating: 5,
     },
   ];
-  const foodData = [
-    {
-      id: 1,
-      name: "Chicken Dum Biryani",
-      image: "/img/food.svg",
-      description:
-        "Slow-cooked basmati rice, tender chicken, aromatic spices, traditional dum style.",
-      price: "£9.99",
-      oldPrice: "£10.98",
-      offer: "50% OFF",
-        uantity: 0,
-    },
-    {
-      id: 2,
-      name: "Mutton Biryani",
-      image: "/img/mutton.svg",
-      description: "Juicy mutton pieces, long-grain basmati rice, rich spices.",
-      price: "£12.99",
-    },
-    {
-      id: 3,
-      name: "Veg Biryani",
-      image: "/img/food.svg",
-      description: "Fresh vegetables, fragrant basmati rice, balanced spices.",
-      price: "£8.49",
-    },
-    {
-      id: 4,
-      name: "Hyderabadi Mutton Biryani",
-      image: "/img/mutton.svg",
-      description: "Traditional Hyderabadi recipe, tender mutton, rich masala.",
-      price: "£13.99",
-    },
-    {
-      id: 5,
-      name: "Fish Biryani",
-      image: "/img/mutton.svg",
-      description:
-        "Fresh fish pieces, light spices, aromatic rice, delicately cooked.",
-      price: "£11.99",
-    },
-  ];
 
   return (
     <div className="container mx-auto">
@@ -74,7 +39,9 @@ const Home = () => {
               50% OFF TODAY
             </div>
           </div>
-          <div className="text-[40px] font-bold mt-5 font-barlow">BIRYANI FEAST OFFER</div>
+          <div className="text-[40px] font-bold mt-5 font-barlow">
+            BIRYANI FEAST OFFER
+          </div>
           <div className="text-[18px] font-inter">
             Authentic homemade biryani, slow-cooked with rich spices.
           </div>
@@ -117,7 +84,12 @@ const Home = () => {
 
       <div className="container mx-auto mt-10 bg-white rounded-2xl shadow-md p-6">
         {foodData.map((item) => (
-          <FoodCard key={item.id} item={item} />
+          <FoodCard
+            key={item.id}
+            item={item}
+            quantity={cart[item.id] ?? item.quantity ?? 0}
+            onQuantityChange={(quantity) => onQuantityChange(item.id, quantity)}
+          />
         ))}
       </div>
 
@@ -134,7 +106,7 @@ const Home = () => {
 
         <hr className="mt-20 border-gray-300" />
       </section>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

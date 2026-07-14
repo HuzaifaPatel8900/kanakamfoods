@@ -1,13 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import type { FoodItem } from "@/types/food";
 
 interface FoodCardProps {
-  item: any;
+  item: FoodItem;
+  quantity: number;
+  onQuantityChange: (quantity: number) => void;
 }
 
-export default function FoodCard({ item }: FoodCardProps) {
-  const [quantity, setQuantity] = useState(item.quantity || 0);
+export default function FoodCard({
+  item,
+  quantity,
+  onQuantityChange,
+}: FoodCardProps) {
   const [selectedSpicy, setSelectedSpicy] = useState("Less Spicy");
 
   const spicyLevels = [
@@ -81,7 +87,7 @@ export default function FoodCard({ item }: FoodCardProps) {
         {quantity > 0 ? (
           <div className="flex items-center bg-orange-500 rounded-2xl text-white gap-3">
             <button
-              onClick={() => setQuantity(quantity - 1)}
+              onClick={() => onQuantityChange(quantity - 1)}
               className="h-9 w-9 rounded-lg bg-orange-500 text-xl"
             >
               -
@@ -92,7 +98,7 @@ export default function FoodCard({ item }: FoodCardProps) {
             </span>
 
             <button
-              onClick={() => setQuantity(quantity + 1)}
+              onClick={() => onQuantityChange(quantity + 1)}
               className="h-9 w-9 rounded-lg bg-orange-500 text-white text-xl"
             >
               +
@@ -100,7 +106,7 @@ export default function FoodCard({ item }: FoodCardProps) {
           </div>
         ) : (
           <button
-            onClick={() => setQuantity(1)}
+            onClick={() => onQuantityChange(1)}
             className="h-10 w-10 rounded-lg bg-gray-100 text-orange-500 text-xl hover:bg-orange-500 hover:text-white"
           >
             +

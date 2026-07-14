@@ -20,7 +20,7 @@ const TestimonialCard = ({ item }: TestimonialProps) => {
       />
 
       <p className="text-gray-700 text-sm leading-7 mt-4">
-        "{item.review}"
+        &quot;{item.review}&quot;
       </p>
 
       <hr className="my-5" />
