@@ -47,7 +47,7 @@ const Footer = () => {
             </div>
 
         <div  className="col-span-1 flex justify-center">Copyright © 2026 • Kanakam Home Foods. | Made with ♥ by Ascendtis.</div>
-        </div>
+        </div>  
     </>
   );
 };

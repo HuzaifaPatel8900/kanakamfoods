@@ -2,7 +2,7 @@ import { foodData } from "@/data/foodData";
 
 export const cartStorageKey = "kanakam-cart";
 
-export type Cart = Record<number, number>;
+export type Cart = Record<string, number>;
 
 const cartChangeEvent = "kanakam-cart-change";
 const emptyCart: Cart = {};
@@ -12,23 +12,25 @@ let lastCartSnapshot: Cart = emptyCart;
 export const getPriceValue = (price: string) => Number(price.replace(/[^\d.]/g, ""));
 
 export const formatCurrency = (amount: number) =>
-  new Intl.NumberFormat("en-GB", {
+  new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "GBP",
+    currency: "INR",
   }).format(amount);
 
-export const getCartSummary = (cart: Cart) => {
-  return foodData.reduce(
+export const getCartSummary = (cart: Cart, items = foodData) => {
+  const total = items.reduce(
     (summary, item) => {
       const quantity = cart[item.id] ?? item.quantity ?? 0;
 
-      return {
-        itemCount: summary.itemCount + quantity,
-        total: summary.total + getPriceValue(item.price) * quantity,
-      };
+      return summary + getPriceValue(item.price) * quantity;
     },
-    { itemCount: 0, total: 0 }
+    0
   );
+
+  return {
+    itemCount: Object.values(cart).reduce((count, quantity) => count + quantity, 0),
+    total,
+  };
 };
 
 export const readCart = (): Cart => {

@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useMemo, useSyncExternalStore } from "react";
+import React, { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import Navbar from "@/components/Navbar";
 import Home from "@/components/Home";
-import { foodData } from "@/data/foodData";
+import { getProducts, toFoodItem } from "@/libs/products";
+import type { FoodItem } from "@/types/food";
 import {
   getCartSummary,
   getServerCart,
@@ -14,10 +15,20 @@ import {
 
 const MainContainer = () => {
   const cart = useSyncExternalStore(subscribeToCart, readCart, getServerCart);
+  const [products, setProducts] = useState<FoodItem[]>([]);
 
-  const cartSummary = useMemo(() => getCartSummary(cart), [cart]);
+  useEffect(() => {
+    getProducts()
+      .then((menuItems) => setProducts(menuItems.map(toFoodItem)))
+      .catch((error) => console.error("Unable to load navbar cart total", error));
+  }, []);
 
-  const handleQuantityChange = (itemId: number, quantity: number) => {
+  const cartSummary = useMemo(
+    () => getCartSummary(cart, products),
+    [cart, products]
+  );
+
+  const handleQuantityChange = (itemId: string, quantity: number) => {
     const nextCart = { ...cart };
 
     if (quantity <= 0) {
@@ -33,7 +44,6 @@ const MainContainer = () => {
     <div className="bg-gray-200">
       <Navbar itemCount={cartSummary.itemCount} total={cartSummary.total} />
       <Home
-        foodData={foodData}
         cart={cart}
         onQuantityChange={handleQuantityChange}
       />

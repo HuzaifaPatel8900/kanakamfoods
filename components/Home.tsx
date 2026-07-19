@@ -1,16 +1,79 @@
-import React from "react";
+"use client";
+
+import React, { useCallback, useEffect, useState } from "react";
 import FoodCard from "./FoodCard";
 import TestimonialCard from "@/components/TestimonialCard";
 import Footer from "./Footer";
-import type { FoodItem } from "@/types/food";
+import type { ICategory, IProduct } from "@/types/food";
+import axios from "axios";
+import {
+  ACCESS_KEY,
+  categoryBinId,
+  ENDPOINT,
+  MASTER_KEY,
+} from "@/libs/endpoint";
+import { getProducts, toFoodItem } from "@/libs/products";
 
 interface HomeProps {
-  foodData: FoodItem[];
-  cart: Record<number, number>;
-  onQuantityChange: (itemId: number, quantity: number) => void;
+  cart: Record<string, number>;
+  onQuantityChange: (itemId: string, quantity: number) => void;
 }
 
-const Home = ({ foodData, cart, onQuantityChange }: HomeProps) => {
+const Home = ({ cart, onQuantityChange }: HomeProps) => {
+  const [categories, setCategories] = useState<ICategory[]>();
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>();
+  const [products, setProducts] = useState<IProduct[]>([]);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(false);
+  const [productsError, setProductsError] = useState<string>();
+
+  const getMenuItems = useCallback(async (categoryId: string) => {
+    try {
+      setIsLoadingProducts(true);
+      setProductsError(undefined);
+
+      const menuItems = await getProducts();
+      console.log("Menu ITEMS",menuItems);
+      
+      setProducts(menuItems.filter((product: IProduct) => product.category_id === categoryId));
+    } catch (error) {
+      console.error(error);
+      setProductsError("Unable to load menu items. Please try again.");
+      setProducts([]);
+    } finally {
+      setIsLoadingProducts(false);
+    }
+  }, []);
+
+  const onCategoryClick = useCallback(async (categoryId: string) => {
+    await getMenuItems(categoryId);
+    setSelectedCategoryId(categoryId);
+  }, [getMenuItems]);
+
+  useEffect(() => {
+    axios
+      .get(`${ENDPOINT}/b/${categoryBinId}`, {
+        headers: {
+          "X-Master-Key": MASTER_KEY,
+          "X-Access-Key": ACCESS_KEY,
+        },
+      })
+      .then((response) => {
+        const loadedCategories: ICategory[] = response.data?.record ?? [];
+        const startersCategory = loadedCategories.find(
+          (category) => category.name.trim().toLowerCase() === "starters"
+        );
+
+        setCategories(loadedCategories);
+
+        if (startersCategory) {
+          void onCategoryClick(startersCategory.id);
+        }
+      })
+      .catch((error) => console.error(error));
+  }, [onCategoryClick]);
+
+  const displayedFoodItems = products.map(toFoodItem);
+
   const testimonials = [
     {
       id: 1,
@@ -58,32 +121,30 @@ const Home = ({ foodData, cart, onQuantityChange }: HomeProps) => {
       </div>
       <div className="flex justify-center">
         <div className="flex text-[#89919A] bg-white gap-5  justify-center px-4 p-3 rounded-2xl">
-          <div className="hover:bg-[#F1941B] cursor-pointer hover:p-3 hover:rounded-xl hover:text-white p-3">
-            Biryani
-          </div>
-          <div className="hover:bg-[#F1941B] cursor-pointer hover:p-3 hover:rounded-xl hover:text-white p-3">
-            Rice Varieties
-          </div>
-          <div className="hover:bg-[#F1941B] cursor-pointer hover:p-3 hover:rounded-xl hover:text-white p-3">
-            Curries
-          </div>
-          <div className="hover:bg-[#F1941B] cursor-pointer hover:p-3 hover:rounded-xl hover:text-white p-3">
-            Veg Specials
-          </div>
-          <div className="hover:bg-[#F1941B] cursor-pointer hover:p-3 hover:rounded-xl hover:text-white p-3">
-            Non-Veg Specials
-          </div>
-          <div className="hover:bg-[#F1941B] cursor-pointer hover:p-3 hover:rounded-xl hover:text-white p-3">
-            Sweets & Desserts
-          </div>
-          <div className="hover:bg-[#F1941B] cursor-pointer hover:p-3 hover:rounded-xl hover:text-white p-3">
-            Chutneys
-          </div>
+          {categories?.map((c) => (
+            <div
+              key={c.id}
+              className={`hover:bg-[#F1941B] cursor-pointer hover:p-3 hover:rounded-xl hover:text-white p-3 ${selectedCategoryId === c.id && "bg-[#F1941B] rounded-xl text-white"}`}
+              onClick={() => onCategoryClick(c.id)}
+            >
+              {c.name}
+            </div>
+          ))}
         </div>
       </div>
 
       <div className="container mx-auto mt-10 bg-white rounded-2xl shadow-md p-6">
-        {foodData.map((item) => (
+        {isLoadingProducts && (
+          <p className="py-5 text-gray-500">Loading menu items...</p>
+        )}
+
+        {productsError && <p className="py-5 text-red-600">{productsError}</p>}
+
+        {!isLoadingProducts && !productsError && selectedCategoryId && displayedFoodItems.length === 0 && (
+          <p className="py-5 text-gray-500">No menu items are available in this category.</p>
+        )}
+
+        {!isLoadingProducts && !productsError && displayedFoodItems.map((item) => (
           <FoodCard
             key={item.id}
             item={item}

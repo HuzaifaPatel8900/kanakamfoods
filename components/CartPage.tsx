@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import Navbar from "@/components/Navbar";
-import { foodData } from "@/data/foodData";
+import { getProducts, toFoodItem } from "@/libs/products";
+import type { FoodItem } from "@/types/food";
 import {
   formatCurrency,
   getCartSummary,
@@ -16,19 +17,28 @@ import {
 
 const CartPage = () => {
   const cart = useSyncExternalStore(subscribeToCart, readCart, getServerCart);
+  const [products, setProducts] = useState<FoodItem[]>([]);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
 
-  const cartSummary = useMemo(() => getCartSummary(cart), [cart]);
+  useEffect(() => {
+    getProducts()
+      .then((menuItems) => setProducts(menuItems.map(toFoodItem)))
+      .catch((error) => console.error("Unable to load cart products", error))
+      .finally(() => setIsLoadingProducts(false));
+  }, []);
+
+  const cartSummary = useMemo(() => getCartSummary(cart, products), [cart, products]);
 
   const cartItems = useMemo(() => {
-    return foodData
+    return products
       .map((item) => ({
         ...item,
         quantity: cart[item.id] ?? item.quantity ?? 0,
       }))
       .filter((item) => item.quantity > 0);
-  }, [cart]);
+  }, [cart, products]);
 
-  const handleQuantityChange = (itemId: number, quantity: number) => {
+  const handleQuantityChange = (itemId: string, quantity: number) => {
     const nextCart = { ...cart };
 
     if (quantity <= 0) {
@@ -61,7 +71,11 @@ const CartPage = () => {
           </Link>
         </div>
 
-        {cartItems.length > 0 ? (
+        {isLoadingProducts ? (
+          <div className="bg-white rounded-2xl p-10 text-center shadow-md text-gray-500">
+            Loading your cart...
+          </div>
+        ) : cartItems.length > 0 ? (
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_360px]">
             <div className="bg-white rounded-2xl p-6 shadow-md">
               {cartItems.map((item) => {
