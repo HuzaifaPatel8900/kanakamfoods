@@ -12,20 +12,20 @@ const Navbar = ({ itemCount, total }: NavbarProps) => {
 
   return (
     <>
-      <div className="bg-white sticky top-0">
-        <div className="p-4 flex justify-between items-center container mx-auto">
-          <img src="/img/logo.svg" alt="" />
-          <div className="flex items-center gap-4">
-            <div className="text-[#16A34A] bg-[#F0FDF4] border-[#D1FFE1] border rounded-3xl p-3">
+      <div className="sticky top-0 z-50 bg-white shadow-sm">
+        <div className="container mx-auto flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
+          <img className="h-auto w-28 sm:w-auto" src="/img/logo.svg" alt="Kanakam Home Foods" />
+          <div className="flex items-center gap-2 sm:gap-4">
+            <div className="hidden text-sm text-[#16A34A] bg-[#F0FDF4] border-[#D1FFE1] border rounded-3xl p-3 lg:block">
               Open Now | Closes at 9:30 PM
             </div>
-            <div className="flex bg-[#F1941B] cursor-pointer text-white p-4 gap-2 items-center rounded-xl">
+            <div className="hidden bg-[#F1941B] cursor-pointer text-white p-3 gap-2 items-center rounded-xl sm:flex">
               <img className="size-6" src="/img/Vector.svg" alt="" />
               <span className="font-semibold">MENU</span>
             </div>
             <Link
               href="/cart"
-              className="flex bg-[#55240A] cursor-pointer text-white p-4 gap-2 items-center rounded-xl"
+              className="flex bg-[#55240A] cursor-pointer text-white p-3 gap-2 items-center rounded-xl sm:p-4"
             >
               <img className="size-6" src="/img/Vector (1).svg" alt="" />
               <span className="font-semibold">
@@ -34,7 +34,7 @@ const Navbar = ({ itemCount, total }: NavbarProps) => {
                   {itemCount}
                 </span>
               </span>
-              <span className="font-semibold">{formattedTotal}</span>
+              <span className="hidden font-semibold sm:inline">{formattedTotal}</span>
             </Link>
           </div>
         </div>

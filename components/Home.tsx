@@ -29,7 +29,7 @@ const Home = ({ cart, onQuantityChange }: HomeProps) => {
   const getMenuItems = useCallback(async (categoryId: string) => {
     try {
       setIsLoadingProducts(true);
-      setProductsError(undefined);
+      setProductsError(undefined); 
 
       const menuItems = await getProducts();
       console.log("Menu ITEMS",menuItems);
@@ -94,18 +94,18 @@ const Home = ({ cart, onQuantityChange }: HomeProps) => {
   ];
 
   return (
-    <div className="container mx-auto">
-      <div className="container mx-auto text-white mt-8 mb-10 bg-[#F1941B] p-14 rounded-3xl flex justify-between ">
-        <div className="">
+    <div className="container mx-auto px-4 sm:px-6">
+      <div className="container mx-auto mt-5 mb-8 flex flex-col justify-between gap-8 rounded-3xl bg-[#F1941B] p-6 text-white sm:p-10 lg:mt-8 lg:mb-10 lg:flex-row lg:p-14">
+        <div>
           <div className="flex">
             <div className=" font-semibold text-[18px] bg-[#55240A] mt-5 p-3 px-6 rounded-4xl">
               50% OFF TODAY
             </div>
           </div>
-          <div className="text-[40px] font-bold mt-5 font-barlow">
+          <div className="mt-5 font-barlow text-3xl font-bold sm:text-[40px]">
             BIRYANI FEAST OFFER
           </div>
-          <div className="text-[18px] font-inter">
+          <div className="text-base sm:text-[18px]">
             Authentic homemade biryani, slow-cooked with rich spices.
           </div>
           <hr className="text-[#BC6A00] border-3 mt-5" />
@@ -114,17 +114,17 @@ const Home = ({ cart, onQuantityChange }: HomeProps) => {
             ORDER NOW
           </div>
         </div>
-        <div className="flex">
-          <img className="max-h-25" src="/img/dis.svg" alt="" />
-          <img className="pt-10" src="/img/biryani.svg" alt="" />
+        <div className="flex justify-center lg:justify-end">
+          <img className="max-h-20 sm:max-h-25" src="/img/dis.svg" alt="" />
+          <img className="w-44 pt-8 sm:w-auto sm:pt-10" src="/img/biryani.svg" alt="" />
         </div>
       </div>
-      <div className="flex justify-center">
-        <div className="flex text-[#89919A] bg-white gap-5  justify-center px-4 p-3 rounded-2xl">
+      <div className="-mx-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0">
+        <div className="flex w-max min-w-full text-[#89919A] bg-white gap-1 sm:gap-3 justify-center px-2 py-2 rounded-2xl">
           {categories?.map((c) => (
             <div
               key={c.id}
-              className={`hover:bg-[#F1941B] cursor-pointer hover:p-3 hover:rounded-xl hover:text-white p-3 ${selectedCategoryId === c.id && "bg-[#F1941B] rounded-xl text-white"}`}
+              className={`whitespace-nowrap hover:bg-[#F1941B] cursor-pointer hover:rounded-xl hover:text-white px-3 py-2 sm:p-3 ${selectedCategoryId === c.id && "bg-[#F1941B] rounded-xl text-white"}`}
               onClick={() => onCategoryClick(c.id)}
             >
               {c.name}
@@ -133,7 +133,7 @@ const Home = ({ cart, onQuantityChange }: HomeProps) => {
         </div>
       </div>
 
-      <div className="container mx-auto mt-10 bg-white rounded-2xl shadow-md p-6">
+      <div className="container mx-auto mt-6 bg-white rounded-2xl shadow-md p-4 sm:mt-10 sm:p-6">
         {isLoadingProducts && (
           <p className="py-5 text-gray-500">Loading menu items...</p>
         )}
@@ -154,8 +154,8 @@ const Home = ({ cart, onQuantityChange }: HomeProps) => {
         ))}
       </div>
 
-      <section className="container mx-auto mt-20 mb-20">
-        <h2 className="text-4xl font-extrabold text-black uppercase mb-10">
+      <section className="container mx-auto my-12 sm:my-20">
+        <h2 className="mb-8 text-3xl font-extrabold text-black uppercase sm:mb-10 sm:text-4xl">
           Just Like Home, They Say
         </h2>
 

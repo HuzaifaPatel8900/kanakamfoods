@@ -23,7 +23,7 @@ export default function FoodCard({
   ];
 
   return (
-    <div className="flex items-start justify-between gap-4 border-b py-5">
+    <div className="flex flex-col items-stretch gap-4 border-b py-5 sm:flex-row sm:items-start sm:justify-between">
       {/* Left */}
       <div className="flex gap-4 flex-1 text-black">
         <img
@@ -70,8 +70,8 @@ export default function FoodCard({
       </div>
 
       {/* Right */}
-      <div className="flex flex-col items-end gap-4">
-        <div>
+      <div className="flex flex-row items-center justify-between gap-4 sm:flex-col sm:items-end">
+        <div className="text-right">
           {item.oldPrice && (
             <span className="mr-2 text-gray-400 line-through">
               {item.oldPrice}
@@ -85,7 +85,7 @@ export default function FoodCard({
 
         {/* Button Logic */}
         {quantity > 0 ? (
-          <div className="flex items-center bg-orange-500 rounded-2xl text-white gap-3">
+          <div className="flex items-center rounded-2xl bg-orange-500 text-white gap-2 sm:gap-3">
             <button
               onClick={() => onQuantityChange(quantity - 1)}
               className="h-9 w-9 rounded-lg bg-orange-500 text-xl"
@@ -93,7 +93,7 @@ export default function FoodCard({
               -
             </button>
 
-            <span className="font-semibold">
+            <span className="whitespace-nowrap font-semibold text-sm sm:text-base">
               {quantity} Item{quantity > 1 && "s"} Added
             </span>
 

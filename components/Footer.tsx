@@ -2,12 +2,12 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <>
-      <div className="grid grid-cols-2">
-        <div className="col-span-1">
-          <img src="/img/footer.svg" className="ml-10" alt="" />
+    <footer className="pb-8 text-sm sm:text-base">
+      <div className="grid gap-8 md:grid-cols-2">
+        <div>
+          <img src="/img/footer.svg" className="mx-auto md:ml-10" alt="Kanakam Home Foods" />
         </div>
-        <div className="col-span-1 text-black">
+        <div className="text-black">
             <div className="mb-5">
           <div className="flex gap-3">
             <img src="/img/time.svg" alt="" />
@@ -32,14 +32,13 @@ const Footer = () => {
           <div className="pl-8 mb-5">
             +44 20 7946 0958
           </div>
-          <div className="flex gap-8">Social Media <img className="cursor-pointer" src="/img/Facebook.svg" alt="" /><img className="cursor-pointer" src="/img/Twitter.svg" alt="" /><img className="cursor-pointer" src="/img/LinkedIn.svg" alt="" /><img className="cursor-pointer" src="/img/Youtube.svg" alt="" /><img className="cursor-pointer" src="/img/Instagram.svg" alt="" /></div>
+          <div className="flex flex-wrap items-center gap-4">Social Media <img className="cursor-pointer" src="/img/Facebook.svg" alt="Facebook" /><img className="cursor-pointer" src="/img/Twitter.svg" alt="Twitter" /><img className="cursor-pointer" src="/img/LinkedIn.svg" alt="LinkedIn" /><img className="cursor-pointer" src="/img/Youtube.svg" alt="YouTube" /><img className="cursor-pointer" src="/img/Instagram.svg" alt="Instagram" /></div>
           
         </div>
       </div>
         <hr className="border-gray-300 mt-10" />
-        <div className="">bewonewoi</div>
-        <div className="grid grid-cols-2 text-black">
-            <div className="col-span-1 flex gap-5  ">
+        <div className="grid gap-5 text-black md:grid-cols-2">
+            <div className="flex flex-wrap gap-x-5 gap-y-2">
                 <p className="cursor-pointer">MENU</p>
                 <p className="cursor-pointer">CONTACT US</p>
                 <p className="cursor-pointer">PRIVACY POLICY</p>
@@ -47,8 +46,8 @@ const Footer = () => {
             </div>
 
         <div  className="col-span-1 flex justify-center">Copyright © 2026 • Kanakam Home Foods. | Made with ♥ by Ascendtis.</div>
-        </div>  
-    </>
+        </div>
+    </footer>
   );
 };
 

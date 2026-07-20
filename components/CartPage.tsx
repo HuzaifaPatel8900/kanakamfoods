@@ -54,10 +54,10 @@ const CartPage = () => {
     <div className="min-h-screen bg-gray-200">
       <Navbar itemCount={cartSummary.itemCount} total={cartSummary.total} />
 
-      <main className="container mx-auto py-10">
-        <div className="mb-6 flex items-center justify-between">
+      <main className="container mx-auto px-4 py-6 sm:px-6 sm:py-10">
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-4xl font-extrabold text-black">Your Cart</h1>
+            <h1 className="text-3xl font-extrabold text-black sm:text-4xl">Your Cart</h1>
             <p className="mt-2 text-gray-600">
               {cartSummary.itemCount} item{cartSummary.itemCount !== 1 && "s"} selected
             </p>
@@ -84,7 +84,7 @@ const CartPage = () => {
                 return (
                   <div
                     key={item.id}
-                    className="flex items-start justify-between gap-4 border-b py-5 last:border-b-0"
+                    className="flex flex-col gap-4 border-b py-5 last:border-b-0 sm:flex-row sm:items-start sm:justify-between"
                   >
                     <div className="flex flex-1 gap-4 text-black">
                       <img
@@ -105,7 +105,7 @@ const CartPage = () => {
                       </div>
                     </div>
 
-                    <div className="flex flex-col items-end gap-4">
+                    <div className="flex flex-row items-center justify-between gap-4 sm:flex-col sm:items-end">
                       <div className="text-right">
                         <div className="text-sm text-gray-500">{item.price} each</div>
                         <div className="text-2xl font-bold text-black">
